@@ -1,0 +1,121 @@
+* {
+    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom right, black, navy)
+}
+
+.container{
+    background-color: white;
+    height: 600px;
+    width: 400px;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    box-sizing: border-box;
+    border-radius: 13px;
+}
+
+.buttonsAllContainer{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:center;
+    align-items: center;
+    gap: 5px;
+    background: linear-gradient(to top, #d1eaff, #a3d4ff);
+    padding: 10px;
+    height: 100%;
+    border-radius: 13px;
+}
+
+[class^="row-"]{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+}
+
+[class^="row-"] button {
+  padding: 10px;
+  box-sizing: border-box;
+  width: 72.72px;
+  height: 72.72px;
+  border-radius: 50%;
+  border: transparent;
+  font-size: 1.3em;
+  font-weight:600;
+}
+
+.buttonsAllContainer button:last-child, .row-1 button{
+    background-color: navy;
+    color: white;
+}
+
+
+[class^="row-"] button:active{
+    font-size: 1.25em;
+    background-color: #a3d4ff;
+    box-shadow: inset 2px 2px 4px rgba(0,0,0,0.2);
+    font-weight: bold;
+    cursor: pointer;
+    
+}
+
+.buttonsAllContainer button:last-child:active, .row-1 button:active{
+    background-color: navy;
+    box-shadow: inset 2px 2px 4px black;   
+}
+
+.inner-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0 0 0;
+    box-sizing: border-box;
+    
+}
+
+.screens{
+    background-color: white;
+    height: 25%;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px 10px;
+    text-align: right;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    letter-spacing: 0.05rem;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; 
+}
+.screens p{
+    color: black;
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+ 
+}
+
+.screens p:first-child{
+    font-size:2rem;
+    color:rgb(167, 166, 166);
+    min-height: 33%;
+
+}
+
+.screens p:last-child{
+    font-size:3rem;
+    min-height: 66%;
+}
