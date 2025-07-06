@@ -1,7 +1,3 @@
-let screen = document.querySelector('.screens');
-// let operandLeft = "";
-// let operandRight = "";
-// let operator = "";
 let exp = {
     operandLeft: '',
     operandRight: '',
@@ -17,16 +13,20 @@ let symbols = {
     'x': 'multiply',
     '÷': 'divide',
     '%': 'percent',
+    '/': 'division Keyboard',
+    '*': 'multiply keyboard',
 }
 
 let buttons = document.querySelector(".buttonsAllContainer");
 let button = document.querySelectorAll('[class^="row-"] button');
 let screen1 = document.querySelector('.screen-operand');
 let screen2 = document.querySelector('.screen-operator');
+let body    = document.querySelector('body');
 
-let display = function(e) {
-    const val = e.target.textContent;
-    
+let display = function(str) {
+    const val = str;
+    // const val = e.target.textContent || e.key;
+
     //take Input
     operandInput(val);
 
@@ -43,21 +43,21 @@ let display = function(e) {
         screen2.textContent = val;
 }
 
-let clearAll = function (e) {
-    const val = e.target.textContent;
+let clearAll = function (str) {
+    const val = str;
     let display1 = screen1.textContent;
     console.log(val)
-    if(val == 'C'){
+    if(val == 'C' || val == "Escape"){
         exp.operandLeft = '';
         exp.operandRight = '';
         exp.isOperator = false;
-        screen1.textContent = '\u00A0';
+        screen1.textContent = '0';
         screen2.textContent = '\u00A0';
     }
 
     //backspace effect
-    if(val == '⬅'){
-        screen1.textContent = !screen1.textContent || screen1.textContent.length<=1? '0': display1.slice(0, -1);
+    if(val == '⬅' || val == "Backspace"){
+        screen1.textContent = screen1.textContent.length<=1? '0': display1.slice(0, -1);
         if(!exp.isOperator)
             exp.operandLeft = exp.operandLeft? exp.operandLeft.slice(0, exp.operandLeft.length-1):0;
         exp.operandRight = exp.operandRight? exp.operandRight.slice(0, exp.operandRight.length-1):0;
@@ -85,15 +85,18 @@ let operandInput = function(data) {
     //if pressed any operator then turn isOperator = true;
     if(symbols[data]){
         exp.isOperator = true;
+        if(data == '/')
+            exp.operator = "÷";
+        else
         exp.operator = data;
     }
 }
 
-let calculation = function(e){
+let calculation = function(strInput){
     let result = 0;
     leftInt = parseFloat(exp.operandLeft);
     rightInt = parseFloat(exp.operandRight);
-    if(e.target.textContent == '='){
+    if(strInput == '=' || strInput == "Enter"){
         if(!exp.isOperator || exp.isOperator && !exp.operandRight || exp.isOperator && !exp.operandLeft){
             if (exp.isOperator && !exp.operandLeft){
                 screen1.textContent = '0';
@@ -110,9 +113,11 @@ let calculation = function(e){
             break;
             case '-': result = (leftInt - rightInt).toFixed(greatestDecimal());
             break;
-            case '÷': result = (leftInt / rightInt).toFixed(greatestDecimal());
+            case '÷': 
+            case '/':result = (leftInt / rightInt).toFixed(greatestDecimal());
             break;
-            case 'x': result = (leftInt * rightInt).toFixed(greatestDecimal());
+            case 'x': 
+            case '*':result = (leftInt * rightInt).toFixed(greatestDecimal());
             break;
             case '%': {
                 result = (leftInt * (rightInt)/100);
@@ -131,17 +136,23 @@ let calculation = function(e){
         exp.operandLeft = String(result);
         exp.operandRight = '';
     }
-    if(e.target.textContent == '.'){
+    if(strInput == '.'){
+
         if(exp.operandRight){
-            exp.operandRight += "."; 
+                if(!exp.operandRight.includes('.')){
+                    exp.operandRight += "."; 
+                    screen1.textContent = screen1.textContent + ".";
+                }
         }else{
-            exp.operandLeft += ".";
+            if(!exp.operandLeft.includes(".")){
+                exp.operandLeft += ".";
+                screen1.textContent = screen1.textContent + ".";
+            }
         }
 
-        screen1.textContent = screen1.textContent + ".";
     }
     
-    if(e.target.textContent == "±"){
+    if(strInput == "±"){
         if(exp.operandRight){
             exp.operandRight *= -1;
             exp.operandRight = String(exp.operandRight);
@@ -176,153 +187,19 @@ button.forEach(btn => {
 button.forEach(btn => {
     btn.addEventListener('click', (e) => {
     //handle display
-    display(e);
-    //handle clear and backspace operation;
-    clearAll(e);
+    display(e.target.textContent);
+    // handle clear and backspace operation;
+    clearAll(e.target.textContent);
     //Calculation
-    calculation(e);    
+    calculation(e.target.textContent);    
     })
 })
 
-
-
-// operatorList = ['+','-','/','*'];
-// // let isOperator = false;
-// let btnContainer = document.querySelector('.buttonsAllContainer')
-// let buttonArr = [
-//     {value: 1,},
-//     {value: 2,},
-//     {value: 3,},
-//     {value: 4,},
-//     {value: 5,},
-//     {value: 6,},
-//     {value: 7,},
-//     {value: 8,},
-//     {value: 9,},
-//     {value: 0,},
-//     {value: '+',},
-//     {value: '-',},
-//     {value: '/',},
-//     {value: '*',},
-//     {value: '=',},
-//     {value: '.'},
-// ]
-
-// buttonArr = buttonArr.map(item => ({
-//   ...item,
-//   class: 'btn-' + item.value
-// }));
-
-// buttonArr.unshift({value: '⌫', class: 'btn-back'})
-// buttonArr.unshift({value: 'AC', class: 'btn-AC'})
-
-// buttonArr.map(item => {
-//     let btn = document.createElement('button');
-//     btn.classList.add(item.class);
-//     btn.textContent = item.value;
-//     btnContainer.appendChild(btn);
-// })
-
-
-// function setOperand(e, exp){
-//     if(e.target.textContent == '.'){
-//         if(!exp.isDecimal){
-//             if(exp.isOperator){
-//                 exp.operandRight += e.target.textContent;
-//                 exp.isDecimal = true;
-//                 return null;
-//             }else {
-//                 exp.operandLeft += e.target.textContent;
-//                 exp.isDecimal = true;
-//                 return null;
-//             } 
-//         } else {
-//             return null;
-//         }
-//     } else {
-//         if(exp.isOperator){
-//             if(operatorList.includes(e.target.textContent) == false){
-//             exp.operandRight += e.target.textContent;
-//         }
-//     }
-//         else{
-//         exp.operandLeft += e.target.textContent;
-//         }
-//     }
-// }
-
-// function setOperator(eventObj, exp) {
-//     let operVal = eventObj.target.textContent;
-//     if(['+' ,'-', '/', '*'].includes(operVal)){
-//         screen.textContent = "";
-//         exp.operator = operVal;
-//         exp.isOperator = true;
-//     }
-// }
-
-// function display(e, exp){
-//     console.log(e);
-//     //If first time enter number, remove preceding 0.
-//     if(exp.operandRight == "" && exp.operandLeft == ""){
-//         screen.textContent = "";
-//     }    
-//     let numStr = e.target.textContent;
-//     if(isNaN(parseInt(numStr)) == false)
-//         screen.textContent += numStr;
-    
-// }
-
-// let operation = (ex) => {
-//     let left = parseFloat(ex.operandLeft);
-//     let right = parseFloat(ex.operandRight);
-//     exp.isDecimal = false;
-//     switch(ex.operator){
-//         case '+': return left + right;
-//         case '-': return left - right;
-//         case '/': return left / right;
-//         case ('*'): return left * right;
-//     }
-// }
-
-// function reset(ex){
-//     ex.operandLeft = "";
-//     ex.operandRight = "";
-//     ex.prevResult = "";
-//     ex.operator = "";
-//     ex.isOperator = false;
-//     screen.textContent = "";
-// }
-
-// function resultOperation(exp){
-//     screen.textContent = operation(exp);
-//     exp.prevResult = operation(exp);
-//     exp.operandLeft = operation(exp);
-//     exp.operandRight = "";
-// }
-
-// btnContainer.addEventListener('click', (e) =>  {
-//     eventObjContent = e.target.textContent
-
-//     if(e.target.textContent == 'AC'){
-//         reset(exp);
-//     }else if(eventObjContent == '=')
-//         resultOperation(exp)
-//     else if (operatorList.includes(eventObjContent) && exp.operandLeft != "" && exp.operandRight != ""){
-//             setOperator(e,exp);
-//             resultOperation(exp)
-//     }
-//     else{
-//         display(e, exp);
-//         setOperator(e, exp);
-//         setOperand(e, exp);
-//     }
-    
-    
-    
-//     console.log(`Operator = ${exp.operator}
-//         operand Left = ${exp.operandLeft}
-//         operand Right = ${exp.operandRight}`)
-        
-//     })
-    
-    
+body.addEventListener('keydown', (e) =>{
+    console.log(e)
+    display(e.key);
+    // handle clear and backspace operation;
+    clearAll(e.key);
+    //Calculation
+    calculation(e.key);
+})

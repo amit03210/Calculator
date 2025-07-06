@@ -1,16 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
 * {
     box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 body{
     height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background: linear-gradient(to bottom right, black, navy)
 }
+
+
+.note{
+    padding-bottom: 10px;
+    color: white;
+    font-family: 'Nunito', 'Times New Roman', Times, serif;
+    font-weight: 800;
+    font-size: 50px;
+    position: relative;
+
+}
+
+@keyframes flicker{
+    0%{filter:blur(0.1px) brightness(0);}
+    10%{filter:blur(0.1px) brightness(1);}
+    15%{filter:blur(0.1px) brightness(0);}
+    25%{filter:blur(0.1px) brightness(1);}
+    30%{filter:blur(0.1px) brightness(0);}
+    40%{filter:blur(0.1px) brightness(1);}
+    50%{filter:blur(0.1px) brightness(0);}
+    60%{filter:blur(0.1px) brightness(1);}
+    99%{filter:blur(0.1px) brightness(0);}
+    100%{filter:blur(0.1px) brightness(1);}
+}
+
+.note::before{
+    content: attr(data-text);
+    color:white;
+    position: absolute;
+    text-shadow: 0px 0px 10px white;
+    filter:blur(1px) brightness(0);
+    animation: flicker 5s linear 1s forwards;
+}
+
 
 .container{
     background-color: white;
@@ -22,6 +59,7 @@ body{
     align-items: flex-start;
     box-sizing: border-box;
     border-radius: 13px;
+    /* border: #a3d4ff 5px */
 }
 
 .buttonsAllContainer{
@@ -85,6 +123,7 @@ body{
     align-items: center;
     padding: 10px 0 0 0;
     box-sizing: border-box;
+    transform: translateY(10px);
     
 }
 
