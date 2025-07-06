@@ -109,11 +109,25 @@ body{
     
 }
 
+.pressed{
+    font-size: 1.25em;
+    background-color: #a3d4ff;
+    box-shadow: inset 2px 2px 4px rgba(0,0,0,0.2);
+    font-weight: bold;
+    cursor: pointer;
+    border: none ;
+}
+
+
 .buttonsAllContainer button:last-child:active, .row-1 button:active{
     background-color: navy;
     box-shadow: inset 2px 2px 4px black;   
 }
 
+.operatorPressed{
+    background-color: white;
+    box-shadow: inset 2px 2px 4px black;   
+}
 .inner-container {
     height: 100%;
     width: 100%;

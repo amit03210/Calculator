@@ -201,4 +201,16 @@ body.addEventListener('keydown', (e) =>{
     clearAll(e.key);
     //Calculation
     calculation(e.key);
+
+    document.querySelectorAll(".buttonsAllContainer div button").forEach(btn => {
+        if(btn.textContent.trim() == e.key)
+            btn.classList.add('pressed');
+    });
+});
+
+body.addEventListener('keyup', (e) => {
+    document.querySelectorAll(".buttonsAllContainer button").forEach(btn => {
+        if(btn.textContent.trim() == e.key)
+            btn.classList.remove('pressed');
+    })
 })
