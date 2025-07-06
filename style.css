@@ -31,7 +31,7 @@ body{
     align-items: center;
     gap: 5px;
     background: linear-gradient(to top, #d1eaff, #a3d4ff);
-    padding: 10px;
+    padding: 10px 20px;
     height: 100%;
     border-radius: 13px;
 }
@@ -109,7 +109,7 @@ body{
 }
 
 .screens p:first-child{
-    font-size:2rem;
+    font-size:1.5rem;
     color:rgb(167, 166, 166);
     min-height: 33%;
 

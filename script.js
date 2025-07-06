@@ -6,7 +6,7 @@ let exp = {
     operandLeft: '',
     operandRight: '',
     operator: '',
-    prevResult: '',
+    maxDigit: 13,
     isOperator: false,
     isDecimal: false,
 }
@@ -57,10 +57,10 @@ let clearAll = function (e) {
 
     //backspace effect
     if(val == '⬅'){
-        screen1.textContent = display1.slice(0, display1.length - 1)
+        screen1.textContent = !screen1.textContent || screen1.textContent.length<=1? '0': display1.slice(0, -1);
         if(!exp.isOperator)
-            exp.operandLeft = parseInt(exp.operandLeft/10);
-        exp.operandRight = parseInt(exp.operandRight/10);
+            exp.operandLeft = exp.operandLeft? exp.operandLeft.slice(0, exp.operandLeft.length-1):0;
+        exp.operandRight = exp.operandRight? exp.operandRight.slice(0, exp.operandRight.length-1):0;
     }
 
 }
@@ -69,13 +69,16 @@ let operandInput = function(data) {
     
     //operand input after checking if data == number
     if(!isNaN(parseInt(data))){
+        let maxInputDigit = exp.maxDigit;
         if(!exp.isOperator){
             if(exp.operandLeft == '0')
                 exp.operandLeft = data
             else
-                exp.operandLeft += data;
+                if(exp.operandLeft.length<maxInputDigit)
+                    exp.operandLeft += data;
         } else{
-            exp.operandRight += data;
+            if(exp.operandRight.length<maxInputDigit)
+                exp.operandRight += data;
         }
     }
 
@@ -91,27 +94,76 @@ let calculation = function(e){
     leftInt = parseFloat(exp.operandLeft);
     rightInt = parseFloat(exp.operandRight);
     if(e.target.textContent == '='){
+        if(!exp.isOperator || exp.isOperator && !exp.operandRight || exp.isOperator && !exp.operandLeft){
+            if (exp.isOperator && !exp.operandLeft){
+                screen1.textContent = '0';
+                exp.operandRight = "";
+                exp.operandLeft = "0";
+                exp.isOperator = false;
+            }
+            else
+                screen1.textContent = exp.operandLeft;
+            return
+        }
         switch(exp.operator) {
-            case '+': result = leftInt + rightInt;
+            case '+': result = (leftInt + rightInt).toFixed(greatestDecimal());
             break;
-            case '-': result = leftInt - rightInt;
+            case '-': result = (leftInt - rightInt).toFixed(greatestDecimal());
             break;
-            case '÷': result = leftInt / rightInt;
+            case '÷': result = (leftInt / rightInt).toFixed(greatestDecimal());
             break;
-            case 'x': result = leftInt * rightInt;
+            case 'x': result = (leftInt * rightInt).toFixed(greatestDecimal());
             break;
             case '%': {
-                result = leftInt * (rightInt)/100;
+                result = (leftInt * (rightInt)/100).toFixed(greatestDecimal());
                 screen2.textContent = screen2.textContent.slice(0, screen2.textContent.length-1) + "*";
                 exp.operandRight = exp.operandRight/100;
             }
             break;
-            default: result = 0;
+            default: result = leftInt;
+        }
+        if(result.toString().length>exp.maxDigit){
+            console.log(typeof result)
+            result = parseFloat(result).toExponential(exp.maxDigit-5);
         }
         screen1.textContent = result;
         screen2.textContent += ` ${exp.operandRight}`;
         exp.operandLeft = String(result);
-        exp.operandRight = ''
+        exp.operandRight = '';
+    }
+    if(e.target.textContent == '.'){
+        if(exp.operandRight){
+            exp.operandRight += "."; 
+        }else{
+            exp.operandLeft += ".";
+        }
+
+        screen1.textContent = screen1.textContent + ".";
+    }
+    
+    if(e.target.textContent == "±"){
+        if(exp.operandRight){
+            exp.operandRight *= -1;
+            exp.operandRight = String(exp.operandRight);
+        }else
+        {
+            exp.operandLeft *= -1;
+            exp.operandLeft = String(exp.operandLeft);
+        }
+        
+        if(screen1.textContent[0] == "-")
+            screen1.textContent = screen1.textContent.slice(1, screen1.textContent.length);
+        else{
+            screen1.textContent = "-" + screen1.textContent;
+        }
+        
+    }
+
+    function greatestDecimal(){
+        const dR = exp.operandRight.split('.')[1]?exp.operandRight.split('.')[1].length: 0;
+        const dL = exp.operandLeft.split('.')[1]?exp.operandLeft.split('.')[1].length: 0;
+        return Math.max(dR, dL);
+
     }
 }
 
