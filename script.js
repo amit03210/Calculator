@@ -196,7 +196,6 @@ button.forEach(btn => {
 })
 
 body.addEventListener('keydown', (e) =>{
-    console.log(e)
     display(e.key);
     // handle clear and backspace operation;
     clearAll(e.key);
