@@ -115,7 +115,7 @@ let calculation = function(e){
             case 'x': result = (leftInt * rightInt).toFixed(greatestDecimal());
             break;
             case '%': {
-                result = (leftInt * (rightInt)/100).toFixed(greatestDecimal());
+                result = (leftInt * (rightInt)/100);
                 screen2.textContent = screen2.textContent.slice(0, screen2.textContent.length-1) + "*";
                 exp.operandRight = exp.operandRight/100;
             }
