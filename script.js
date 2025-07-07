@@ -58,7 +58,7 @@ let clearAll = function (str) {
     //backspace effect
     if(val == '⬅' || val == "Backspace"){
         screen1.textContent = screen1.textContent.length<=1? '0': display1.slice(0, -1);
-        if(!exp.isOperator)
+        if(!exp.isOperator || (exp.isOperator && exp.operandLeft))
             exp.operandLeft = exp.operandLeft? exp.operandLeft.slice(0, exp.operandLeft.length-1):0;
         exp.operandRight = exp.operandRight? exp.operandRight.slice(0, exp.operandRight.length-1):0;
     }
@@ -96,7 +96,7 @@ let calculation = function(strInput){
     let result = 0;
     leftInt = parseFloat(exp.operandLeft);
     rightInt = parseFloat(exp.operandRight);
-    if(strInput == '=' || strInput == "Enter"){
+    if(strInput == '=' || strInput == "Enter"){ //modification needed to make it modular
         if(!exp.isOperator || exp.isOperator && !exp.operandRight || exp.isOperator && !exp.operandLeft){
             if (exp.isOperator && !exp.operandLeft){
                 screen1.textContent = '0';
